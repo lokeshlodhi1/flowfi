@@ -1,0 +1,14 @@
+{
+  "hosting": {
+    "site": "premium-flowfi",
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      ".github/**"
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false
+  }
+}
