@@ -1,22 +1,33 @@
-name: Deploy to Firebase Hosting
+name: Deploy FlowFi Website
 
 on:
   push:
     branches:
       - main
 
-permissions:
-  contents: read
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+
     steps:
       - uses: actions/checkout@v4
 
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
-          projectId: flowfi-1106
+          node-version: 20
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Create Service Account File
+        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > $HOME/firebase-key.json
+
+      - name: Deploy
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/firebase-key.json
+        run: |
+          firebase deploy --only hosting --project flowfi-1106
